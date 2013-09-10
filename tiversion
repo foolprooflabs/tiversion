@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+var path = require('path'),
+fs = require('fs'),
+xml2js = require("xml2js"),
+parser = new xml2js.Parser();
+
+function walk(p, callback) {
+  if (path.dirname(p) === p) {
+    callback("");
+  } else if (fs.existsSync(path.join(p, 'tiapp.xml'))) {
+    fs.readFile(path.join(p,'tiapp.xml'), function(err, data) {
+      if (err) walk(path.dirname(p), callback);
+      else {
+        parser.parseString(data, function (err, result) {
+          if (err || !result['ti:app']['sdk-version']) walk(path.dirname(p), callback);
+          else {
+            callback(result['ti:app']['sdk-version'].toString());
+          }
+        });
+      }
+    });
+  } else {
+    walk(path.dirname(p),callback);
+  }
+}
+walk(process.cwd(), function(a) {
+  process.stdout.write(a);
+});
