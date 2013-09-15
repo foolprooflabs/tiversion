@@ -1,16 +1,19 @@
 {
   "name": "tiversion",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "return titanium version",
-  "main": "index.js",
+  "main": "./lib/tiversion.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": "./tiversion",
+  "bin": "./bin/tiversion",
   "repository": "https://github.com/dbankier/tiversion",
   "author": "David Bankier",
   "license": "MIT",
   "dependencies": {
-    "xml2js": "~0.2.8"
+    "xml2js": "~0.2.8",
+    "underscore": "~1.5.2",
+    "term-list": "~0.2.0",
+    "colors": "~0.6.2"
   }
 }

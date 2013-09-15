@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+var tiversion = require("../lib/tiversion"),
+    path = require("path"),
+    fs = require("fs"),
+    List = require("term-list");
+    require("colors");
+
+if (process.argv.length === 2) {
+  tiversion.getCurrentVersion(process.cwd(), function(err, ver) {
+    process.stdout.write(ver ? ver.current : "");
+  });
+} else if (process.argv[2] === 'set') {
+  tiversion.list(process.cwd(), function(err, result) {
+    if(err || !result.current) {
+      console.log("Could not find tiapp.xml");
+    } else if (result.versions.length === 0) {
+      console.log("No SDKs installed.");
+    } else {
+      var list = new List({ marker: '› '.cyan, markerLength: 2 });
+      result.versions.map(function(v){ list.add(v, v + (v === result.current ? " [current]".yellow : "  "));});
+      list.start();
+      list.on('keypress', function(key, item){
+        switch (key.name) {
+          case 'return':
+            var tiapp = path.join(result.path, 'tiapp.xml');
+            fs.writeFileSync(tiapp, 
+                             fs.readFileSync(tiapp).toString().replace(
+                               /<sdk-version>.*<\/sdk-version>/g, 
+                               "<sdk-version>" + item + "</sdk-version>" ));
+            list.stop();
+            break;
+        }
+      });
+
+      list.on('empty', function(){
+        list.stop();
+      });
+
+    }
+  });
+}
