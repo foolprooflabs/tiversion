@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 var tiversion = require("../lib/tiversion"),
     path = require("path"),
-    fs = require("fs"),
-    List = require("term-list");
+    fs = require("fs");
     require("colors");
 
 if (process.argv.length === 2) {
@@ -16,6 +15,7 @@ if (process.argv.length === 2) {
     } else if (result.versions.length === 0) {
       console.log("No SDKs installed.");
     } else {
+      List = require("term-list");
       var list = new List({ marker: '› '.cyan, markerLength: 2 });
       result.versions.map(function(v){ list.add(v, v + (v === result.current ? " [current]".yellow : "  "));});
       list.start();
