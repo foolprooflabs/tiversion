@@ -39,7 +39,7 @@ if (process.argv.length === 2) {
     }
   });
 } else if(process.argv[2] === 'switch8'){
-  var pjson = require('./package.json'), item = '', valid=false;
+  var pjson = require('./config.json'), item = '', valid=false;
   if(process.argv[3] === 'off'){
     item = pjson.switch['7'];
     valid = true;
@@ -55,5 +55,9 @@ if (process.argv.length === 2) {
                      fs.readFileSync(tiapp).toString().replace(
                        /<sdk-version>.*<\/sdk-version>/g, 
                        "<sdk-version>" + item + "</sdk-version>" ));
+    console.log("TiApp.xml updated to "+item);
+  }
+  else{
+    console.log("Usage: tiversion switch8 on OR tiversion switch8 off");
   }
 }
