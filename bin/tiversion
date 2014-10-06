@@ -38,4 +38,22 @@ if (process.argv.length === 2) {
 
     }
   });
+} else if(process.argv[2] === 'switch8'){
+  var pjson = require('../package.json'), item = '', valid=false;
+  if(process.argv[3] === 'off'){
+    item = pjson.switch['7'];
+    valid = true;
+  }
+  else if(process.argv[3] === 'on'){  
+    item = pjson.switch['8'];
+    valid = true;
+  }
+
+  if(valid){
+    var tiapp = path.join('./', 'tiapp.xml');
+    fs.writeFileSync(tiapp, 
+                     fs.readFileSync(tiapp).toString().replace(
+                       /<sdk-version>.*<\/sdk-version>/g, 
+                       "<sdk-version>" + item + "</sdk-version>" ));
+  }
 }
